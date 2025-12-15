@@ -2,7 +2,7 @@ name: MLflow CI Training
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   train:
@@ -17,8 +17,15 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install MLflow
-        run: pip install mlflow
+      - name: Install dependencies
+        run: |
+          pip install mlflow scikit-learn pandas numpy
 
       - name: Run MLflow Project
         run: mlflow run MLProject
+
+      - name: Upload MLflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlflow-artifacts
+          path: mlruns
