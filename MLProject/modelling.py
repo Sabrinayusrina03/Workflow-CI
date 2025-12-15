@@ -35,13 +35,6 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-# [PENTING] Set Experiment bisa dilakukan di sini, atau lebih baik diabaikan
-# karena MLflow CLI akan membuat eksperimen default jika belum diset ke DagsHub.
-mlflow.set_experiment("Laptop Price Prediction - Tuning") 
-
-# [PERUBAHAN UTAMA] Hapus 'with mlflow.start_run():'
-# Semua kode di bawah ini sekarang akan berjalan di dalam RUN yang dibuat oleh 'mlflow run MLProject'
-
 grid = GridSearchCV(
     pipeline,
     param_grid,
