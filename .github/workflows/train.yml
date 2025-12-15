@@ -21,7 +21,7 @@ jobs:
         run: |
           pip install mlflow scikit-learn pandas numpy
 
-            - name: Run MLflow Project
+      - name: Run MLflow Project
         run: mlflow run MLProject
 
       - name: Ensure mlruns directory exists
