@@ -41,9 +41,6 @@ X_train, X_test, y_train, y_test = train_test_split(
 mlflow.set_tracking_uri("file:///tmp/mlruns")
 mlflow.set_experiment("Laptop Price Prediction - Tuning")
 
-active_run = mlflow.active_run()
-mlflow.start_run(run_id=active_run.info.run_id)
-
 grid = GridSearchCV(
     pipeline,
     param_grid,
