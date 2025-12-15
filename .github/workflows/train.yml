@@ -46,7 +46,7 @@ jobs:
       - name: Build Docker image with MLflow
         run: |
           mlflow models build-docker \
-            -m MLProject/mlruns \
+            -m ./mlruns \
             -n sabrinayusrinaa/smsml-sabrinayusrina
 
       - name: Push Docker image
