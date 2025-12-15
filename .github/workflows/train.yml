@@ -22,7 +22,7 @@ jobs:
           pip install mlflow scikit-learn pandas numpy
 
       - name: Run MLflow Project
-        run: mlflow run MLProject
+        run: mlflow run MLProject --env-manager=local
 
       - name: Ensure mlruns directory exists
         run: |
