@@ -21,8 +21,15 @@ jobs:
         run: |
           pip install mlflow scikit-learn pandas numpy
 
-      - name: Run MLflow Project
+            - name: Run MLflow Project
         run: mlflow run MLProject
+
+      - name: Ensure mlruns directory exists
+        run: |
+          if [ ! -d "mlruns" ]; then
+            echo "mlruns directory not found, creating empty directory"
+            mkdir mlruns
+          fi
 
       - name: Upload MLflow artifacts
         uses: actions/upload-artifact@v4
