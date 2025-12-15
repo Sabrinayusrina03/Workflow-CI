@@ -1,4 +1,3 @@
-import os
 import pandas as pd
 import mlflow
 import mlflow.sklearn
@@ -9,8 +8,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_absolute_error, r2_score
 
-# 🔒 IKAT RUN DARI MLFLOW PROJECTS (PENTING)
-mlflow.start_run(run_id=os.environ.get("MLFLOW_RUN_ID"))
+mlflow.set_tracking_uri("file:./mlruns")
 
 df = pd.read_csv("laptop_clean.csv")
 
@@ -56,7 +54,6 @@ r2 = r2_score(y_test, y_pred)
 mlflow.log_param("alpha", grid.best_params_["model__alpha"])
 mlflow.log_metric("MAE", mae)
 mlflow.log_metric("R2", r2)
-
 mlflow.sklearn.log_model(best_model, "model")
 
 print("Best alpha:", grid.best_params_)
