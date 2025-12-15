@@ -1,14 +1,17 @@
 import pandas as pd
 import mlflow
 import mlflow.sklearn
+
+# 🔥 WAJIB
+mlflow.set_tracking_uri("file:./mlruns")
+mlflow.set_experiment("Laptop Price Prediction - Tuning")
+
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_absolute_error, r2_score
-
-mlflow.set_experiment("Laptop Price Prediction - Tuning")
 
 df = pd.read_csv("laptop_clean.csv")
 
@@ -51,7 +54,6 @@ y_pred = best_model.predict(X_test)
 mae = mean_absolute_error(y_test, y_pred)
 r2 = r2_score(y_test, y_pred)
 
-# 🔥 TANPA start_run
 mlflow.log_param("alpha", grid.best_params_["model__alpha"])
 mlflow.log_metric("MAE", mae)
 mlflow.log_metric("R2", r2)
