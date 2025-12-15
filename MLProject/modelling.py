@@ -1,6 +1,7 @@
 import pandas as pd
 import mlflow
 import mlflow.sklearn
+import numpy as np
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
@@ -8,7 +9,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_absolute_error, r2_score
 
-# Load data
+# Load data clean
 df = pd.read_csv("laptop_clean.csv")
 
 X = df.drop(columns=["Price_euros"])
@@ -22,9 +23,11 @@ preprocessor = ColumnTransformer([
     ("cat", OneHotEncoder(handle_unknown="ignore"), cat_cols)
 ])
 
+model = Ridge()
+
 pipeline = Pipeline([
     ("preprocess", preprocessor),
-    ("model", Ridge())
+    ("model", model)
 ])
 
 param_grid = {
@@ -35,6 +38,9 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
+mlflow.set_experiment("Laptop Price Prediction - Tuning")
+
+#with mlflow.start_run():
 grid = GridSearchCV(
     pipeline,
     param_grid,
@@ -50,7 +56,7 @@ y_pred = best_model.predict(X_test)
 mae = mean_absolute_error(y_test, y_pred)
 r2 = r2_score(y_test, y_pred)
 
-# Panggilan log sekarang menggunakan RUN yang sudah aktif
+# Manual logging
 mlflow.log_param("alpha", grid.best_params_["model__alpha"])
 mlflow.log_metric("MAE", mae)
 mlflow.log_metric("R2", r2)
