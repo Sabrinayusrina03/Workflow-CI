@@ -21,15 +21,17 @@ jobs:
         run: |
           pip install mlflow scikit-learn pandas numpy
 
-      - name: Run MLflow Project
-        run: mlflow run MLProject --env-manager=local
-
-      - name: Ensure mlruns directory exists
+      # 🔥 INI FIX PALING PENTING
+      - name: Clear MLflow inherited run
         run: |
-          if [ ! -d "mlruns" ]; then
-            echo "mlruns directory not found, creating empty directory"
-            mkdir mlruns
-          fi
+          unset MLFLOW_RUN_ID
+          unset MLFLOW_TRACKING_URI
+
+      - name: Run MLflow Project
+        env:
+          MLFLOW_RUN_ID: ""
+        run: |
+          mlflow run MLProject --env-manager=local
 
       - name: Upload MLflow artifacts
         uses: actions/upload-artifact@v4
