@@ -8,8 +8,6 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_absolute_error, r2_score
 
-mlflow.set_tracking_uri("file:./mlruns")
-
 df = pd.read_csv("laptop_clean.csv")
 
 X = df.drop(columns=["Price_euros"])
