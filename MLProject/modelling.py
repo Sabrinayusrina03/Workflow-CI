@@ -54,11 +54,10 @@ y_pred = best_model.predict(X_test)
 mae = mean_absolute_error(y_test, y_pred)
 r2 = r2_score(y_test, y_pred)
 
-# 🔥 INI KUNCI UTAMA
-with mlflow.start_run():
-    mlflow.log_param("alpha", grid.best_params_["model__alpha"])
-    mlflow.log_metric("MAE", mae)
-    mlflow.log_metric("R2", r2)
-    mlflow.sklearn.log_model(best_model, "model")
+
+mlflow.log_param("alpha", grid.best_params_["model__alpha"])
+mlflow.log_metric("MAE", mae)
+mlflow.log_metric("R2", r2)
+mlflow.sklearn.log_model(best_model, "model")
 
 print("Training finished successfully")
