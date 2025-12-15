@@ -1,4 +1,4 @@
-name: laptop-price-mlflow
+name: smsml-sabrinayusrina
 
 entry_points:
   main:
