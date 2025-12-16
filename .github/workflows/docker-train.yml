@@ -31,6 +31,13 @@ jobs:
     - name: Set DagsHub Tracking Token
       run: echo "DOCKER_ENV_DAGSHUB_TOKEN=${{ secrets.DAGSHUB_TOKEN }}" >> $GITHUB_ENV
     
+    - name: Diagnose Login Success
+      run: |
+        docker pull hello-world:latest
+        
+        echo "Attempting to push to repository: sabrinayusrinaa/smsml-sabrinayusrina"
+        echo "Using username: ${{ secrets.DOCKER_USERNAME }}"
+
     # Build dan Push
     - name: Build and Push Docker Image
       uses: docker/build-push-action@v5
