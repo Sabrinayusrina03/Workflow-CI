@@ -1,5 +1,7 @@
 name: Laptop_Price_Prediction_CI
 
+conda_env: conda.yaml
+
 entry_points:
   main:
     command: "python modelling.py --data_path {data_path}"
