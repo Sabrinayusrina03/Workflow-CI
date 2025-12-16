@@ -19,7 +19,7 @@ jobs:
 
       - name: Install Dependencies for MLflow Run
         run: |
-          pip install mlflow dagshub
+          pip install mlflow dagshub pandas scikit-learn numpy matplotlib
 
       - name: Set MLflow Tracking Credentials
         env:
