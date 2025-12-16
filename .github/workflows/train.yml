@@ -1,54 +1,39 @@
-name: MLflow CI Training
+name: Model Retraining CI
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
+    paths:
+      - 'MLProject/**'
+      - 'laptop_clean.csv'
 
 jobs:
-  train:
+  run-mlflow-project:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    
+    - name: Install Dependencies for MLflow Run
+      run: |
+        pip install mlflow dagshub
 
-      - name: Install dependencies
-        run: |
-          pip install mlflow scikit-learn pandas numpy
+    - name: Set MLflow Tracking Credentials
+      run: |
+        # Konfigurasi DagsHub URI
+        mlflow tracking uri https://dagshub.com/Sabrinayusrina03/eksperimen_SML_SabrinaYusrina.mlflow
+        # Set Username (sesuai DagsHub.txt)
+        export MLFLOW_TRACKING_USERNAME=Sabrinayusrina03
+      env:
+        MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_TOKEN }}
 
-      - name: Clear MLflow inherited run
-        run: |
-          unset MLFLOW_RUN_ID
-          unset MLFLOW_TRACKING_URI
-
-      - name: Run MLflow Project
-        env:
-          MLFLOW_RUN_ID: ""
-        run: |
-          mlflow run MLProject --env-manager=local
-
-      - name: Upload MLflow artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: mlflow-artifacts
-          path: MLProject/mlruns
-
-      - name: Login to Docker Hub
-        run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login \
-            -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
-      - name: Build Docker image with MLflow
-        run: |
-          mlflow models build-docker \
-            -m ./mlruns \
-            -n sabrinayusrinaa/smsml-sabrinayusrina
-
-      - name: Push Docker image
-        run: |
-          docker push sabrinayusrinaa/smsml-sabrinayusrina
+    - name: Run MLflow Project (Training Model)
+      run: |
+        # Perintah ini akan menggunakan conda.yaml di MLProject untuk membuat environment dan menjalankan modelling.py
+        mlflow run . --experiment-name "CI_Workflow_Run"

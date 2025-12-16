@@ -1,5 +1,9 @@
-name: smsml-sabrinayusrina
+name: Laptop_Price_Prediction_CI
+
+conda_env: conda.yaml
 
 entry_points:
   main:
-    command: "python modelling.py"
+    command: "python modelling.py --data_path {data_path}"
+    parameters:
+      data_path: {type: path, default: "../laptop_clean.csv"}
