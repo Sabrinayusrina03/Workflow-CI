@@ -14,7 +14,7 @@ from sklearn.metrics import mean_absolute_error, r2_score
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--data_path", type=str, default="../laptop_clean.csv")
+parser.add_argument("--data_path", type=str, default="laptop_clean.csv")
 args = parser.parse_args()
 
 # Konfigurasi User
