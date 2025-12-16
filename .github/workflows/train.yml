@@ -12,16 +12,31 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Miniconda & Run MLflow Project
+      - name: Set up Miniconda Environment
         uses: conda-incubator/setup-miniconda@v3
         with:
-          python-version: '3.10'
-          miniconda-version: 'latest'
+          python-version: "3.10"
+          miniconda-version: "latest"
           channels: conda-forge
           activate-environment: true
-          environment-file: 'MLProject/conda.yaml'
+          environment-file: "MLProject/conda.yaml"
           auto-update-conda: true
-          condacmd: 'mlflow run ./MLProject -P data_path=MLProject/laptop_clean.csv --experiment-name CI_Workflow_Run'
+          auto-activate-base: false
+
+      - name: Set MLflow Tracking Credentials
+        run: |
+          echo "MLflow tracking credentials set via Environment Variables."
+        env:
+          MLFLOW_TRACKING_URI: https://dagshub.com/Sabrinayusrina03/eksperimen_SML_SabrinaYusrina.mlflow
+          MLFLOW_TRACKING_USERNAME: Sabrinayusrina03
+          MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_TOKEN }}
+
+      - name: Run MLflow Project (Training Model)
+        shell: bash -l {0}
+        run: |
+          pip install mlflow dagshub
+
+          mlflow run ./MLProject -P data_path=MLProject/laptop_clean.csv --experiment-name "CI_Workflow_Run"
         env:
           MLFLOW_TRACKING_URI: https://dagshub.com/Sabrinayusrina03/eksperimen_SML_SabrinaYusrina.mlflow
           MLFLOW_TRACKING_USERNAME: Sabrinayusrina03
