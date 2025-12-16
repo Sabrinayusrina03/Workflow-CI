@@ -9,7 +9,8 @@ ARG DAGSHUB_TOKEN
 
 # Instal dependencies
 RUN conda install -c conda-forge --name base python=3.10 pip && \
-    pip install mlflow dagshub
+    pip install mlflow dagshub && \
+    echo "Dependencies installed successfully"
 
 # Set environment variables
 ENV MLFLOW_TRACKING_URI=https://dagshub.com/Sabrinayusrina03/eksperimen_SML_SabrinaYusrina.mlflow
