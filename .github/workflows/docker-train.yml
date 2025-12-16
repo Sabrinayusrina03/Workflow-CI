@@ -39,14 +39,14 @@ jobs:
         echo "Using username: ${{ secrets.DOCKER_USERNAME }}"
 
     # Build dan Push
-    - name: Build and Push Docker Image
-      uses: docker/build-push-action@v5
-      with:
-        context: . 
-        push: true 
-        tags: |
-          sabrinayusrinaa/smsml-sabrinayusrina:latest
-          sabrinayusrinaa/smsml-sabrinayusrina:${{ github.sha }}
-        # MENGIRIM TOKEN KE DOCKERFILE
-        build-args: |
-          DAGSHUB_TOKEN=${{ env.DOCKER_ENV_DAGSHUB_TOKEN }}
+    - name: Build Docker Image (Local Build)
+      run: |
+        docker build -t sabrinayusrinaa/smsml-sabrinayusrina:latest . --build-arg DAGSHUB_TOKEN=${{ secrets.DAGSHUB_TOKEN }}
+        docker tag sabrinayusrinaa/smsml-sabrinayusrina:latest sabrinayusrinaa/smsml-sabrinayusrina:${{ github.sha }}
+
+    - name: Push Docker Image (Explicit Push)
+      run: |
+        echo "Starting explicit push for latest tag..."
+        docker push sabrinayusrinaa/smsml-sabrinayusrina:latest
+        echo "Starting explicit push for SHA tag..."
+        docker push sabrinayusrinaa/smsml-sabrinayusrina:${{ github.sha }}
