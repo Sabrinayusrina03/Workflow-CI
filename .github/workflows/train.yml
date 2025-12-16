@@ -5,35 +5,33 @@ on:
     branches:
       - main
     paths:
-      - 'MLProject/**'
-      - 'laptop_clean.csv'
+      - "MLProject/**"
+      - "laptop_clean.csv"
 
 jobs:
   run-mlflow-project:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
-    
-    - name: Install Dependencies for MLflow Run
-      run: |
-        pip install mlflow dagshub
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
 
-    - name: Set MLflow Tracking Credentials
-      run: |
-        # Konfigurasi DagsHub URI
-        mlflow tracking uri https://dagshub.com/Sabrinayusrina03/eksperimen_SML_SabrinaYusrina.mlflow
-        # Set Username (sesuai DagsHub.txt)
-        export MLFLOW_TRACKING_USERNAME=Sabrinayusrina03
-      env:
-        MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_TOKEN }}
+      - name: Install Dependencies for MLflow Run
+        run: |
+          pip install mlflow dagshub
 
-    - name: Run MLflow Project (Training Model)
-      run: |
-        # Perintah ini akan menggunakan conda.yaml di MLProject untuk membuat environment dan menjalankan modelling.py
-        mlflow run . --experiment-name "CI_Workflow_Run"
+      - name: Set MLflow Tracking Credentials
+        env:
+          MLFLOW_TRACKING_URI: https://dagshub.com/Sabrinayusrina03/eksperimen_SML_SabrinaYusrina.mlflow
+          MLFLOW_TRACKING_USERNAME: Sabrinayusrina03
+          MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_TOKEN }}
+        run: |
+
+      - name: Run MLflow Project (Training Model)
+        run: |
+          # Perintah ini akan menggunakan conda.yaml di MLProject untuk membuat environment dan menjalankan modelling.py
+          mlflow run . --experiment-name "CI_Workflow_Run"
