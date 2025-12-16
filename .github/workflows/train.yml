@@ -21,6 +21,10 @@ jobs:
           auto-update-conda: true
           auto-activate-base: false
 
+      - name: Install MLflow CLI (Command)
+        run: |
+          pip install mlflow dagshub
+
       - name: Set MLflow Tracking Credentials
         env:
           MLFLOW_TRACKING_URI: https://dagshub.com/Sabrinayusrina03/eksperimen_SML_SabrinaYusrina.mlflow
