@@ -30,4 +30,4 @@ jobs:
 
       - name: Run MLflow Project (Training Model)
         run: |
-          mlflow run ./MLProject --experiment-name "CI_Workflow_Run"
+          mlflow run ./MLProject -P data_path=laptop_clean.csv --experiment-name "CI_Workflow_Run"
