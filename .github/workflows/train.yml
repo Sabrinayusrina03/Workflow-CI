@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "MLProject/**"
-      - "laptop_clean.csv"
 
 jobs:
   run-mlflow-project:
