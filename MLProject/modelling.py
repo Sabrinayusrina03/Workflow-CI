@@ -52,62 +52,60 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-mlflow.set_experiment("Laptop Price Prediction - Tuning")
 
-with mlflow.start_run():
-    grid = GridSearchCV(
-        pipeline,
-        param_grid,
-        cv=3,
-        scoring="r2"
-    )
-    
-    grid.fit(X_train, y_train)
-    best_model = grid.best_estimator_
+grid = GridSearchCV(
+    pipeline,
+    param_grid,
+    cv=3,
+    scoring="r2"
+)
 
-    y_pred = best_model.predict(X_test)
+grid.fit(X_train, y_train)
+best_model = grid.best_estimator_
 
-    mae = mean_absolute_error(y_test, y_pred)
-    r2 = r2_score(y_test, y_pred)
+y_pred = best_model.predict(X_test)
 
-    # Manual logging
-    mlflow.log_param("alpha", grid.best_params_["model__alpha"])
-    mlflow.log_metric("MAE", mae)
-    mlflow.log_metric("R2", r2)
+mae = mean_absolute_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
 
-    mlflow.sklearn.log_model(best_model, "model")
+# Manual logging
+mlflow.log_param("alpha", grid.best_params_["model__alpha"])
+mlflow.log_metric("MAE", mae)
+mlflow.log_metric("R2", r2)
 
-    print("Best alpha:", grid.best_params_)
-    print("MAE:", mae)
-    print("R2:", r2)
+mlflow.sklearn.log_model(best_model, "model")
 
-    # Artefak 1: Residual Plot
-    # Hitung Residual
-    residuals = y_test - y_pred
+print("Best alpha:", grid.best_params_)
+print("MAE:", mae)
+print("R2:", r2)
 
-    # Buat Plot
-    fig, ax = plt.subplots()
-    ax.scatter(y_pred, residuals, edgecolors=(0, 0, 0))
-    ax.axhline(y=0, color='r', linestyle='--')
-    ax.set_xlabel('Predicted Values')
-    ax.set_ylabel('Residuals')
-    ax.set_title('Residual Plot')
+# Artefak 1: Residual Plot
+# Hitung Residual
+residuals = y_test - y_pred
 
-    # Log Plot ke DagsHub
-    mlflow.log_figure(fig, "Residual_Plot.png")
+# Buat Plot
+fig, ax = plt.subplots()
+ax.scatter(y_pred, residuals, edgecolors=(0, 0, 0))
+ax.axhline(y=0, color='r', linestyle='--')
+ax.set_xlabel('Predicted Values')
+ax.set_ylabel('Residuals')
+ax.set_title('Residual Plot')
 
-    plt.close(fig)
+# Log Plot ke DagsHub
+mlflow.log_figure(fig, "Residual_Plot.png")
 
-    #Artefak 2: Metrics Text File (.txt)
-    metrics_file_path = "model_metrics_summary.txt"
+plt.close(fig)
 
-    with open(metrics_file_path, 'w') as f:
-        f.write(f"Model: {type(best_model).__name__}\n") 
-        f.write("-" * 25 + "\n")
-        f.write(f"MAE (Mean Absolute Error): {mean_absolute_error(y_test, y_pred)}\n")
-        f.write(f"R2 Score: {r2_score(y_test, y_pred)}\n")
+#Artefak 2: Metrics Text File (.txt)
+metrics_file_path = "model_metrics_summary.txt"
 
-    # Log file teks ke DagsHub
-    mlflow.log_artifact(metrics_file_path)
+with open(metrics_file_path, 'w') as f:
+    f.write(f"Model: {type(best_model).__name__}\n") 
+    f.write("-" * 25 + "\n")
+    f.write(f"MAE (Mean Absolute Error): {mean_absolute_error(y_test, y_pred)}\n")
+    f.write(f"R2 Score: {r2_score(y_test, y_pred)}\n")
 
-    os.remove(metrics_file_path)
+# Log file teks ke DagsHub
+mlflow.log_artifact(metrics_file_path)
+
+os.remove(metrics_file_path)
