@@ -1,0 +1,7 @@
+pandas
+scikit-learn
+mlflow
+dagshub
+flask
+gunicorn
+prometheus-client

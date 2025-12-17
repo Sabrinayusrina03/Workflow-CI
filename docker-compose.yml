@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  # Service Model ML (dari Dockerfile.serve)
+  ml-model-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.serve
+      args:
+        - DAGSHUB_TOKEN=${DAGSHUB_TOKEN}
+    ports:
+      - "5000:5000" # Port API Flask
+      - "8000:8000" # Port Prometheus Exporter (metrics)
+    environment:
+      - DAGSHUB_TOKEN=${DAGSHUB_TOKEN}
+
+  # Prometheus (Monitoring)
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./monitoring_metrics/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - ml-model-service
+
+  # Grafana (Dashboard & Alerting)
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus

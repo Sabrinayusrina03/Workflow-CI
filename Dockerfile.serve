@@ -1,0 +1,31 @@
+FROM continuumio/miniconda3
+
+# Set working directory di dalam container
+WORKDIR /app
+
+# Salin semua file proyek
+COPY . /app
+
+ARG DAGSHUB_TOKEN
+
+# Instal dependencies dasar
+RUN conda install -c conda-forge --name base python=3.10 pip -y && \
+    echo "Base dependencies installed successfully"
+
+# Instal dependencies dari requirements.txt
+RUN pip install -r requirements.txt && \
+    echo "Serving dependencies installed successfully"
+
+# Set environment variables untuk DagsHub
+ENV MLFLOW_TRACKING_URI=https://dagshub.com/Sabrinayusrina03/eksperimen_SML_SabrinaYusrina.mlflow
+ENV MLFLOW_TRACKING_USERNAME=Sabrinayusrina03
+ENV DAGSHUB_TOKEN=${DAGSHUB_TOKEN} 
+ENV DAGSHUB_TOKEN=${DAGSHUB_TOKEN} 
+
+
+# Ekspos Port untuk API (5000) dan Prometheus Exporter (8000)
+EXPOSE 5000
+EXPOSE 8000
+
+# ENTRYPOINT BARU (gunicorn)
+ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:5000", "serving_model.inference:app"]
