@@ -2,7 +2,7 @@ name: Model Retraining CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   run-mlflow-project:
@@ -17,9 +17,12 @@ jobs:
         with:
           python-version: "3.12.7"
 
+      - name: Check Env
+        run: python --version
+
       - name: Install dependencies
         run: |
-          pip install mlflow==2.19.0 dagshub
+          pip install mlflow==2.19.0 dagshub pandas scikit-learn
 
       - name: Run mlflow project
         env:
@@ -27,12 +30,12 @@ jobs:
           MLFLOW_TRACKING_USERNAME: Sabrinayusrina03
           MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_TOKEN }}
         run: |
-          mlflow run ./MLProject --experiment-name "CI_Workflow_Run"
+          # Gunakan --env-manager local agar tidak mencari 'conda activate'
+          mlflow run ./MLProject --env-manager local --experiment-name "CI_Workflow_Run"
 
-      # TAHAPAN UNTUK POIN ADVANCE (DOCKER)
       - name: Build Docker Model
         run: |
-          docker build -t sabrinayusrina03/laptop-price-model:latest .
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/laptop-price-model:latest .
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -42,4 +45,4 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker push sabrinayusrina03/laptop-price-model:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/laptop-price-model:latest
