@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  # Service Model ML (dari Dockerfile.serve)
+  # Service Model ML
   ml-model-service:
     build:
       context: .
