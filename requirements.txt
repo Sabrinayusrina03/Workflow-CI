@@ -1,6 +1,6 @@
 pandas
 scikit-learn
-mlflow
+mlflow==2.19.0
 dagshub
 flask
 gunicorn

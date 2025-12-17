@@ -8,7 +8,7 @@ COPY . /app
 ARG DAGSHUB_TOKEN
 
 # Instal dependencies
-RUN conda install -c conda-forge --name base python=3.10 pip && \
+RUN conda install -c conda-forge --name base python=3.12.7 pip && \
     pip install mlflow dagshub && \
     echo "Dependencies installed successfully"
 

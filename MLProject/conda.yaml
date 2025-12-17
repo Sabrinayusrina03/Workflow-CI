@@ -3,13 +3,12 @@ channels:
   - defaults
   - conda-forge
 dependencies:
-  - python=3.10
+  - python=3.12.7
   - pip
   - pip:
-    # Wajib: Library untuk model dan tracking
-    - pandas
-    - scikit-learn
-    - numpy
-    - matplotlib
-    - mlflow
-    - dagshub
+      - pandas
+      - scikit-learn
+      - numpy
+      - matplotlib
+      - mlflow==2.19.0
+      - dagshub

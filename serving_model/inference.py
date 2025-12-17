@@ -42,6 +42,13 @@ RAM_USED_AVG = Summary('ram_used_avg', 'Average RAM in request')
 # Setup Aplikasi dan Model
 
 app = Flask(__name__)
+
+try:
+    start_http_server(8000, addr='0.0.0.0')
+    print("Metrics server is running on port 8000")
+except Exception as e:
+    print(f"Metrics server error: {e}")
+
 # Muat model dari DagsHub
 print(f"Loading model from DagsHub: {DAGSHUB_MODEL_URI}...")
 try:
@@ -98,12 +105,3 @@ def predict():
     except Exception as e:
         PREDICTION_FAILURE_COUNT.inc()
         return jsonify({"error": str(e)}), 500
-
-# Main Execution
-
-if __name__ == '__main__':
-    start_http_server(8000)
-    print("Prometheus metrics server started on port 8000")
-    
-    # Menjalankan Flask App pada port 5000 (untuk API /predict)
-    app.run(host='0.0.0.0', port=5000)
