@@ -12,7 +12,7 @@ DAGSHUB_MODEL_URI = "runs:/3aaa60c6501c4abfbc82ddf531f13000/model"
 # Set kredensial DagsHub
 os.environ['MLFLOW_TRACKING_URI'] = "https://dagshub.com/Sabrinayusrina03/eksperimen_SML_SabrinaYusrina.mlflow"
 os.environ['MLFLOW_TRACKING_USERNAME'] = "Sabrinayusrina03"
-os.environ['MLFLOW_TRACKING_PASSWORD'] = os.environ.get("DAGSHUB_TOKEN", "<ISI_DENGAN_DAGSHUB_TOKEN_ANDA>") 
+os.environ['MLFLOW_TRACKING_PASSWORD'] = os.environ.get("DAGSHUB_TOKEN")
 
 #  Inisialisasi Metrik Prometheus (Minimal 10 Metrik)
 
