@@ -9,7 +9,7 @@ COPY . /app
 ARG DAGSHUB_TOKEN
 
 # Instal dependencies dasar
-RUN conda install -c conda-forge --name base python=3.10 pip -y && \
+RUN conda install -c conda-forge --name base python=3.12.7 pip -y && \
     echo "Base dependencies installed successfully"
 
 # Instal dependencies dari requirements.txt
@@ -19,7 +19,7 @@ RUN pip install -r requirements.txt && \
 # Set environment variables untuk DagsHub
 ENV MLFLOW_TRACKING_URI=https://dagshub.com/Sabrinayusrina03/eksperimen_SML_SabrinaYusrina.mlflow
 ENV MLFLOW_TRACKING_USERNAME=Sabrinayusrina03
-ENV DAGSHUB_TOKEN=${DAGSHUB_TOKEN} 
+ENV MLFLOW_TRACKING_PASSWORD=${DAGSHUB_TOKEN}
 ENV DAGSHUB_TOKEN=${DAGSHUB_TOKEN} 
 
 
